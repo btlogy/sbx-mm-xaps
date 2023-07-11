@@ -5,6 +5,7 @@ import {
   connectSnap,
   getSnap,
   sendHello,
+  getAccounts,
   shouldDisplayReconnectButton,
 } from '../utils';
 import {
@@ -12,6 +13,7 @@ import {
   InstallFlaskButton,
   ReconnectButton,
   SendHelloButton,
+  GetAccountsButton,
   Card,
 } from '../components';
 
@@ -126,6 +128,46 @@ const Index = () => {
     }
   };
 
+  const handleGetAccountsClick = async () => {
+    console.log('Get Accounts click detected...');
+    console.log("Values in 'currentAccounts' =");
+    console.log(state.currentAccounts);
+    try {
+      const accounts = await getAccounts();
+      if (accounts.length === 0) {
+        console.log('Empty list of accounts!');
+      } else {
+        console.log("Values in 'accounts' =")
+        console.log(accounts);
+        let hasChanged: boolean = false;
+        if (accounts.length == state.currentAccounts.length) {
+          for (var i = 0, l = accounts.length; i < l; i++) {
+            if (accounts[i] !== state.currentAccounts[i]) {
+              hasChanged = true;
+              break;
+            }
+          }
+        } else {
+          hasChanged = true;
+        }
+
+        // Updating our state if the accounts have changed
+        if (hasChanged) {
+          console.log('Accounts have changed!');
+          dispatch({
+            type: MetamaskActions.SetAccounts,
+            payload: accounts,
+          })
+        } else {
+          console.log('Accounts have not changed');
+        }
+      }
+    } catch (e) {
+      console.error(e);
+      dispatch({ type: MetamaskActions.SetError, payload: e });
+    }
+  };
+
   return (
     <Container>
       <Heading>
@@ -201,6 +243,21 @@ const Index = () => {
             Boolean(state.installedSnap) &&
             !shouldDisplayReconnectButton(state.installedSnap)
           }
+        />
+        <Card
+          content={{
+            title: 'Get accounts',
+            description:
+              'Display the ID of the connected account(s): ' + state.currentAccounts.join(' '),
+            button: (
+              <GetAccountsButton
+                onClick={handleGetAccountsClick}
+                // disabled={!state.installedSnap}
+              />
+            ),
+          }}
+          disabled={!state.isFlask}
+          fullWidth
         />
         <Notice>
           <p>
