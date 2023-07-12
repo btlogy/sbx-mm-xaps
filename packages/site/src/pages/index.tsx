@@ -4,7 +4,8 @@ import { MetamaskActions, MetaMaskContext } from '../hooks';
 import {
   connectSnap,
   getSnap,
-  sendHello,
+  sendConfirmation,
+  sendPrompt,
   getAccounts,
   shouldDisplayReconnectButton,
 } from '../utils';
@@ -12,7 +13,8 @@ import {
   ConnectButton,
   InstallFlaskButton,
   ReconnectButton,
-  SendHelloButton,
+  SendConfirmationButton,
+  SendPromptButton,
   GetAccountsButton,
   Card,
 } from '../components';
@@ -119,9 +121,21 @@ const Index = () => {
     }
   };
 
-  const handleSendHelloClick = async () => {
+  const handleSendConfirmationClick = async () => {
     try {
-      await sendHello();
+      const reply = await sendConfirmation();
+      console.log("Reply was = " + reply)
+    } catch (e) {
+      console.error(e);
+      dispatch({ type: MetamaskActions.SetError, payload: e });
+    }
+  };
+
+  const handleSendPromptClick = async () => {
+  console.log('Send Prompt click detected...');
+   try {
+      const reply = await sendPrompt();
+      console.log("Reply was = " + reply)
     } catch (e) {
       console.error(e);
       dispatch({ type: MetamaskActions.SetError, payload: e });
@@ -227,12 +241,31 @@ const Index = () => {
         )}
         <Card
           content={{
-            title: 'Send Hello message',
+            title: 'Send Confirmation message',
             description:
               'Display a custom message within a confirmation screen in MetaMask.',
             button: (
-              <SendHelloButton
-                onClick={handleSendHelloClick}
+              <SendConfirmationButton
+                onClick={handleSendConfirmationClick}
+                disabled={!state.installedSnap}
+              />
+            ),
+          }}
+          disabled={!state.installedSnap}
+          fullWidth={
+            state.isFlask &&
+            Boolean(state.installedSnap) &&
+            !shouldDisplayReconnectButton(state.installedSnap)
+          }
+        />
+        <Card
+          content={{
+            title: 'Send Prompt message',
+            description:
+              'Display a custom message within a prompt screen in MetaMask.',
+            button: (
+              <SendPromptButton
+                onClick={handleSendPromptClick}
                 disabled={!state.installedSnap}
               />
             ),
