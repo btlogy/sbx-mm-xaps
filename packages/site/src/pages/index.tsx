@@ -4,7 +4,7 @@ import { MetamaskActions, MetaMaskContext } from '../hooks';
 import {
   connectSnap,
   getSnap,
-  sendHello,
+  sendConfirmation,
   sendPrompt,
   getAccounts,
   shouldDisplayReconnectButton,
@@ -13,7 +13,7 @@ import {
   ConnectButton,
   InstallFlaskButton,
   ReconnectButton,
-  SendHelloButton,
+  SendConfirmationButton,
   SendPromptButton,
   GetAccountsButton,
   Card,
@@ -121,9 +121,10 @@ const Index = () => {
     }
   };
 
-  const handleSendHelloClick = async () => {
+  const handleSendConfirmationClick = async () => {
     try {
-      await sendHello();
+      const reply = await sendConfirmation();
+      console.log("Reply was = " + reply)
     } catch (e) {
       console.error(e);
       dispatch({ type: MetamaskActions.SetError, payload: e });
@@ -240,12 +241,12 @@ const Index = () => {
         )}
         <Card
           content={{
-            title: 'Send Hello message',
+            title: 'Send Confirmation message',
             description:
               'Display a custom message within a confirmation screen in MetaMask.',
             button: (
-              <SendHelloButton
-                onClick={handleSendHelloClick}
+              <SendConfirmationButton
+                onClick={handleSendConfirmationClick}
                 disabled={!state.installedSnap}
               />
             ),

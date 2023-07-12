@@ -13,17 +13,14 @@ import { divider, heading, panel, spinner, text } from '@metamask/snaps-ui';
  */
 export const onRpcRequest: OnRpcRequestHandler = ({ origin, request }) => {
   switch (request.method) {
-    case 'hello':
+    case 'confirmation':
       return snap.request({
         method: 'snap_dialog',
         params: {
           type: 'confirmation',
           content: panel([
-            text(`Hello, **${origin}**!`),
-            text('This custom confirmation is just for display purposes.'),
-            text(
-              'But you can edit the snap source code to make it do something, if you want to!',
-            ),
+            heading('Confirmation requested'),
+            text(`Do you agree with the end-user policy from **${origin}**?`),
           ]),
         },
       });
