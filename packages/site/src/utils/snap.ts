@@ -61,4 +61,18 @@ export const sendHello = async () => {
   });
 };
 
+/**
+ * Invoke the "prompt" method to get some input from the MM user.
+ */
+export const sendPrompt = async (): Promise<string | null> => {
+  const reply = await window.ethereum.request({
+    method: 'wallet_invokeSnap',
+    params: { snapId: defaultSnapOrigin, request: { method: 'prompt' } },
+  });
+  if (typeof reply === 'string') {
+    return `${reply}`; // no idea why I can not just return reply!
+  }
+  return null;
+};
+
 export const isLocalSnap = (snapId: string) => snapId.startsWith('local:');

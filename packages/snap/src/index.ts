@@ -1,5 +1,5 @@
 import { OnRpcRequestHandler } from '@metamask/snaps-types';
-import { panel, text } from '@metamask/snaps-ui';
+import { divider, heading, panel, spinner, text } from '@metamask/snaps-ui';
 
 /**
  * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
@@ -24,6 +24,20 @@ export const onRpcRequest: OnRpcRequestHandler = ({ origin, request }) => {
             text(
               'But you can edit the snap source code to make it do something, if you want to!',
             ),
+          ]),
+        },
+      });
+    case 'prompt':
+      return snap.request({
+        method: 'snap_dialog',
+        params: {
+          type: 'prompt',
+          content: panel([
+            heading('Welcome back!'),
+            text('**The decentralized web awaits**'),
+            divider(),
+            spinner(),
+            text('Password'),
           ]),
         },
       });

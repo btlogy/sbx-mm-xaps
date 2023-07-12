@@ -98,6 +98,10 @@ export const SendHelloButton = (props: ComponentProps<typeof Button>) => {
   return <Button {...props}>Send message</Button>;
 };
 
+export const SendPromptButton = (props: ComponentProps<typeof Button>) => {
+  return <Button {...props}>Prompt message</Button>;
+};
+
 export const GetAccountsButton = (props: ComponentProps<typeof Button>) => {
   return <Button {...props}>Get Accounts</Button>;
 };

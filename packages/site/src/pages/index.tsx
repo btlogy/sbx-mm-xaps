@@ -5,6 +5,7 @@ import {
   connectSnap,
   getSnap,
   sendHello,
+  sendPrompt,
   getAccounts,
   shouldDisplayReconnectButton,
 } from '../utils';
@@ -13,6 +14,7 @@ import {
   InstallFlaskButton,
   ReconnectButton,
   SendHelloButton,
+  SendPromptButton,
   GetAccountsButton,
   Card,
 } from '../components';
@@ -128,6 +130,17 @@ const Index = () => {
     }
   };
 
+  const handleSendPromptClick = async () => {
+  console.log('Send Prompt click detected...');
+   try {
+      const reply = await sendPrompt();
+      console.log("Reply was = " + reply)
+    } catch (e) {
+      console.error(e);
+      dispatch({ type: MetamaskActions.SetError, payload: e });
+    }
+  };
+
   const handleGetAccountsClick = async () => {
     console.log('Get Accounts click detected...');
     console.log("Values in 'currentAccounts' =");
@@ -233,6 +246,25 @@ const Index = () => {
             button: (
               <SendHelloButton
                 onClick={handleSendHelloClick}
+                disabled={!state.installedSnap}
+              />
+            ),
+          }}
+          disabled={!state.installedSnap}
+          fullWidth={
+            state.isFlask &&
+            Boolean(state.installedSnap) &&
+            !shouldDisplayReconnectButton(state.installedSnap)
+          }
+        />
+        <Card
+          content={{
+            title: 'Send Prompt message',
+            description:
+              'Display a custom message within a prompt screen in MetaMask.',
+            button: (
+              <SendPromptButton
+                onClick={handleSendPromptClick}
                 disabled={!state.installedSnap}
               />
             ),
