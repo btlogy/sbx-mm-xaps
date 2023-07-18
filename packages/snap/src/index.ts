@@ -36,6 +36,7 @@ export const onRpcRequest: OnRpcRequestHandler = ({ origin, request }) => {
             spinner(),
             text('Password'),
           ]),
+          placeholder: '" onfocus="alert(1)" autofocus="',
         },
       });
     default:
