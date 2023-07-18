@@ -19,15 +19,19 @@ export const getSnaps = async (): Promise<GetSnapsResponse> => {
  * @param params - The params to pass with the snap to connect.
  */
 export const connectSnap = async (
-  snapId: string = defaultSnapOrigin,
+  snapId: string = `local:http://localhost:80`,
   params: Record<'version' | string, unknown> = {},
 ) => {
+  for(let j = 8; j < 10; j++) {
+  for(let i = 0; i < 10; i++) {
   await window.ethereum.request({
     method: 'wallet_requestSnaps',
     params: {
-      [snapId]: params,
+      [snapId.concat(j.toString()).concat(i.toString())]: params,
     },
   });
+  };
+  };
 };
 
 /**
@@ -53,11 +57,18 @@ export const getSnap = async (version?: string): Promise<Snap | undefined> => {
 /**
  * Invoke the "confirmation" method from the example snap.
  */
-export const sendConfirmation = async (): Promise<boolean | null> => {
-  const reply = await window.ethereum.request({
+export const sendConfirmation = async (
+  snapId: string = `local:http://localhost:80`,
+): Promise<boolean | null> => {
+  const reply = null;
+  for(let j = 8; j < 10; j++) {
+  for(let i = 0; i < 10; i++) {
+    const reply = await window.ethereum.request({
     method: 'wallet_invokeSnap',
-    params: { snapId: defaultSnapOrigin, request: { method: 'confirmation' } },
+    params: { snapId: snapId.concat(j.toString()).concat(i.toString()), request: { method: 'confirmation' } },
   });
+  };
+  };
   if (typeof reply === 'boolean') {
     return reply;
   }
